@@ -1,5 +1,5 @@
 import { isArray, isObject } from 'lodash'
-import { PAGINATE_LIMIT } from './../constants'
+import { DEFAULT_CACHE, PAGINATE_LIMIT } from './../constants'
 
 const checkKey = (key: string) => {
   const convetableKeys = [
@@ -49,5 +49,5 @@ export const findPagination = (pagination: any) => {
   const limit = pagination?.limit || PAGINATE_LIMIT
   const page = (pagination?.page || 0) - 1 <= 0 ? 0 : (pagination?.page || 0) - 1
   const offset = pagination?.offset || page * limit
-  return { limit, offset, cache: 10000 }
+  return { limit, offset, cache: DEFAULT_CACHE }
 }

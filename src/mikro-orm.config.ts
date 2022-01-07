@@ -1,7 +1,7 @@
 import path from 'path'
 
 import { MikroORM } from 'mikro-orm'
-import { DATABASE_HOST, DATABASE_NAME, DATABASE_PASS, DATABASE_USER, PROD } from './constants'
+import { DATABASE_HOST, DATABASE_NAME, DATABASE_PASS, DATABASE_USER, DEFAULT_CACHE, PROD } from './constants'
 
 import { User } from './entities/User'
 import { Article } from './entities/Article'
@@ -21,9 +21,9 @@ export default {
   },
   resultCache: PROD
     ? {
-        expiration: 10000,
+        expiration: DEFAULT_CACHE,
         adapter: RedisCacheAdapter,
-        options: { expiration: 10000 } as RedisCacheAdapterOptions
+        options: { expiration: DEFAULT_CACHE } as RedisCacheAdapterOptions
       }
     : undefined
 } as Parameters<typeof MikroORM.init>[0]
