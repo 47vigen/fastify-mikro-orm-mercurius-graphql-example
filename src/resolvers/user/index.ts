@@ -1,27 +1,19 @@
-import { Resolver, Query, Ctx, Arg, Mutation, InputType, Field, ObjectType } from 'type-graphql'
-import { sign, signRefresh, verifyRefresh } from './../services/jwt'
-import { User } from '../entities/User'
-import { MainCtx } from '../types'
 import argon2 from 'argon2'
+import { GraphQLResolveInfo } from 'graphql'
 import { JsonWebTokenError } from 'jsonwebtoken'
+import { Resolver, Query, Ctx, Arg, Mutation, Args, FieldResolver, Info, Root } from 'type-graphql'
 
-@InputType()
-class UserInput {
-  @Field()
-  email!: string
-  @Field()
-  password!: string
-}
+import { MainCtx } from '../../types'
+import { User } from '../../entities/User'
+import { Article } from '../../entities/Article'
+import { UserWithToken, UserInput } from './types'
+import { ArticleArguments } from '../article/types'
+import { findOrderBy, findPagination, findWhere } from '../../utils/findWithOptions'
+import { sign, signRefresh, verifyRefresh } from '../../services/jwt'
+import { fieldsToRelationsArgumentable } from './../../utils/fieldsToRelations'
+import { merge } from 'lodash'
 
-@ObjectType()
-class UserWithToken {
-  @Field()
-  user!: User
-  @Field()
-  token!: string
-}
-
-@Resolver()
+@Resolver(() => User)
 export class UserResolver {
   @Query(() => User, { nullable: true })
   me(@Ctx() { user }: MainCtx): User | null {
@@ -80,5 +72,21 @@ export class UserResolver {
         throw new Error('you must login')
       } else throw e
     }
+  }
+
+  @FieldResolver(() => [Article], { nullable: true })
+  async articles(
+    @Root() root: User,
+    @Ctx() { em }: MainCtx,
+    @Info() info: GraphQLResolveInfo,
+    @Args() args: ArticleArguments
+  ): Promise<Article[] | null> {
+    if (Object.keys(args).length) {
+      return em.find(Article, merge({ author: { id: { $eq: root.id } } }, findWhere(args.filters)), {
+        populate: fieldsToRelationsArgumentable(info, ['description', 'fullbody']),
+        orderBy: findOrderBy(args.orderBy),
+        ...findPagination(args.pagination)
+      })
+    } else return root.articles.toJSON() as Article[] | null
   }
 }

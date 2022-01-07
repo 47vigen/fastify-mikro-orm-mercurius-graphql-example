@@ -1,16 +1,8 @@
 import { Collection, Entity, Enum, OneToMany, Property } from 'mikro-orm'
-import { Field, ObjectType, registerEnumType } from 'type-graphql'
-import { Base } from './inheritance/Base'
+import { Field, ObjectType } from 'type-graphql'
+import { UserRole } from '../resolvers/user/types'
+import { Base } from '../inheritance/types'
 import { Article } from './Article'
-
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user'
-}
-
-registerEnumType(UserRole, {
-  name: 'UserRole'
-})
 
 @ObjectType()
 @Entity()
@@ -26,7 +18,6 @@ export class User extends Base<User> {
   @Enum({ items: () => UserRole, default: UserRole.USER })
   role: UserRole = UserRole.USER
 
-  @Field(() => [Article])
   @OneToMany(() => Article, (article) => article.author)
   articles = new Collection<Article>(this)
 }
