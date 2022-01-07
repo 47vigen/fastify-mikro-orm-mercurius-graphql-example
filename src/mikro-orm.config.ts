@@ -5,6 +5,7 @@ import { DATABASE_HOST, DATABASE_NAME, DATABASE_PASS, DATABASE_USER, PROD } from
 
 import { User } from './entities/User'
 import { Article } from './entities/Article'
+import { RedisCacheAdapter, RedisCacheAdapterOptions } from 'mikro-orm-cache-adapter-redis'
 
 export default {
   entities: [User, Article],
@@ -17,5 +18,12 @@ export default {
   migrations: {
     path: path.join(__dirname, './migrations'),
     pattern: /^[\w-]+\d+\.[tj]s$/
-  }
+  },
+  resultCache: PROD
+    ? {
+        expiration: 10000,
+        adapter: RedisCacheAdapter,
+        options: {} as RedisCacheAdapterOptions
+      }
+    : undefined
 } as Parameters<typeof MikroORM.init>[0]
