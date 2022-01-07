@@ -49,5 +49,5 @@ export const findPagination = (pagination: any) => {
   const limit = pagination?.limit || PAGINATE_LIMIT
   const page = (pagination?.page || 0) - 1 <= 0 ? 0 : (pagination?.page || 0) - 1
   const offset = pagination?.offset || page * limit
-  return { limit, offset }
+  return { limit, offset, cache: 10000 }
 }

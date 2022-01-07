@@ -23,7 +23,7 @@ export default {
     ? {
         expiration: 10000,
         adapter: RedisCacheAdapter,
-        options: {} as RedisCacheAdapterOptions
+        options: { expiration: 10000 } as RedisCacheAdapterOptions
       }
     : undefined
 } as Parameters<typeof MikroORM.init>[0]
