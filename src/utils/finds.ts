@@ -2,7 +2,7 @@ import { GraphQLResolveInfo } from 'graphql'
 import { isArray, isObject, merge } from 'lodash'
 import { AnyEntity, EntityManager, IDatabaseDriver, Connection, FindOptions, Collection, EntityName, FilterQuery, Populate } from 'mikro-orm'
 import { MetaResponseCollection } from '../inheritance/types'
-import { DEFAULT_CACHE, PAGINATE_LIMIT } from '../constants'
+import { CACHE_EXPIRATION_TIME, PAGINATE_LIMIT } from '../constants'
 import { fieldsToRelationsArgumentable } from './fieldsToRelations'
 import { fieldsProjection } from 'graphql-fields-list'
 
@@ -54,7 +54,7 @@ export const findPagination = (pagination: any) => {
   const limit = pagination?.limit || PAGINATE_LIMIT
   const page = (pagination?.page || 0) - 1 <= 0 ? 0 : (pagination?.page || 0) - 1
   const offset = pagination?.offset || page * limit
-  return { limit, offset, cache: DEFAULT_CACHE }
+  return { limit, offset, cache: CACHE_EXPIRATION_TIME }
 }
 
 export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate<T> = any>(
@@ -77,7 +77,7 @@ export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate
   const FindOptions = {
     limit,
     offset,
-    cache: DEFAULT_CACHE,
+    cache: CACHE_EXPIRATION_TIME,
     orderBy: findOrderBy(args.orderBy),
     populate: fieldsToRelationsArgumentable(info, includes) as any
   } as FindOptions<T, P>

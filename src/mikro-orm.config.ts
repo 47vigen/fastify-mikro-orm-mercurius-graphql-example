@@ -3,7 +3,7 @@ import path from 'path'
 import { merge } from 'lodash'
 import { MikroORM } from 'mikro-orm'
 import { RedisCacheAdapter, RedisCacheAdapterOptions } from 'mikro-orm-cache-adapter-redis'
-import { DATABASE_HOST, DATABASE_NAME, DATABASE_PASS, DATABASE_USER, DEFAULT_CACHE, PROD } from './constants'
+import { DATABASE_HOST, DATABASE_NAME, DATABASE_PASS, DATABASE_USER, CACHE_EXPIRATION_TIME, PROD } from './constants'
 
 import { User } from './entities/User'
 import { Article } from './entities/Article'
@@ -24,9 +24,9 @@ const defaultOptions = {
 
 const productionOptions = {
   resultCache: {
-    expiration: DEFAULT_CACHE,
+    expiration: CACHE_EXPIRATION_TIME,
     adapter: RedisCacheAdapter,
-    options: { expiration: DEFAULT_CACHE } as RedisCacheAdapterOptions
+    options: { expiration: CACHE_EXPIRATION_TIME } as RedisCacheAdapterOptions
   }
 } as Parameters<typeof MikroORM.init>[0]
 

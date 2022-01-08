@@ -17,4 +17,4 @@ export const JWT_REFRESH_SECRET: string = process.env.JWT_REFRESH_SECRET
 export const COOKIE_SECRET: string = process.env.COOKIE_SECRET
 
 export const PAGINATE_LIMIT: number = Number(process.env.PAGINATE_LIMIT) || 20
-export const DEFAULT_CACHE: number = Number(process.env.DEFAULT_CACHE) || 1000 * 60 * 30 // 30m
+export const CACHE_EXPIRATION_TIME: number = Number(process.env.CACHE_EXPIRATION_TIME) || 1000 * 60 * 60 // 1h
