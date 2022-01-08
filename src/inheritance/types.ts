@@ -422,7 +422,7 @@ export class BaseArguments {
   pagination?: PaginationInput
 
   @Field(() => [Order], { nullable: true })
-  orderBy?: [Order]
+  orderBy?: Order[]
 }
 
 @ObjectType()

@@ -33,10 +33,10 @@ export class ArticleFiltersInput extends BaseFiltersInput {
   author?: UserFiltersInput
 
   @Field(() => [ArticleFiltersInput], { nullable: true })
-  and?: [ArticleFiltersInput]
+  and?: ArticleFiltersInput[]
 
   @Field(() => [ArticleFiltersInput], { nullable: true })
-  or?: [ArticleFiltersInput]
+  or?: ArticleFiltersInput[]
 
   @Field(() => ArticleFiltersInput, { nullable: true })
   not?: ArticleFiltersInput
@@ -51,5 +51,5 @@ export class ArticleArguments extends BaseArguments {
 @ObjectType()
 export class ArticlesResponseCollection extends BaseResponseCollection {
   @Field(() => [Article], { nullable: true })
-  data?: [Article]
+  data?: Article[]
 }

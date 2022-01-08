@@ -64,12 +64,12 @@ export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate
   info: GraphQLResolveInfo,
   where: FilterQuery<T> = {},
   includes?: string[]
-): Promise<{ meta: MetaResponseCollection; data: [T] | undefined }> => {
+): Promise<{ meta: MetaResponseCollection; data: T[] | undefined }> => {
   const limit = args.pagination?.limit || PAGINATE_LIMIT
   const page = (args.pagination?.page || 0) - 1 <= 0 ? 0 : (args.pagination?.page || 0) - 1
   const offset = args.pagination?.offset || page * limit
 
-  let data: [T] | (undefined & any) = []
+  let data: T[] | (undefined & any) = []
   let meta: MetaResponseCollection = { page: page + 1, limit }
   const needCount = Object.keys(fieldsProjection(info)).includes('meta.pages') || Object.keys(fieldsProjection(info)).includes('meta.total')
 
@@ -102,12 +102,12 @@ export const findRelationalWithOptions = async <T extends AnyEntity<T>>(
   where: FilterQuery<T> = {},
   collection: Collection<T>,
   includes?: string[]
-): Promise<{ meta: MetaResponseCollection; data: [T] | undefined }> => {
+): Promise<{ meta: MetaResponseCollection; data: T[] | undefined }> => {
   if (Object.keys(args).length) {
     return await findWithOptions(em, entityName, args, info, where, includes)
   }
   return {
-    data: collection.toJSON() as [T] | undefined,
+    data: collection.toJSON() as T[] | undefined,
     meta: { page: 1, pages: 1, limit: collection.count(), total: collection.count() }
   }
 }
