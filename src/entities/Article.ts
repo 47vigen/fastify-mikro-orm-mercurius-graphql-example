@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, Property } from 'mikro-orm'
 import { Field, ObjectType } from 'type-graphql'
-import { Base } from '../inheritance/types'
+import { Base } from '../inheritance/entities'
 import { User } from './User'
 
 @ObjectType()

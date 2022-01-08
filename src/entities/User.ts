@@ -1,7 +1,7 @@
 import { Collection, Entity, Enum, OneToMany, Property } from 'mikro-orm'
 import { Field, ObjectType } from 'type-graphql'
 import { UserRole } from '../resolvers/user/types'
-import { Base } from '../inheritance/types'
+import { Base } from '../inheritance/entities'
 import { Article } from './Article'
 
 @ObjectType()

@@ -1,30 +1,9 @@
-import { BaseEntity, PrimaryKey, Property, QueryOrder } from 'mikro-orm'
-import { ArgsType, Field, Float, ID, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
-import { v4 as uuid } from 'uuid'
+import { QueryOrder } from 'mikro-orm'
+import { ArgsType, Field, Float, ID, InputType, Int, registerEnumType } from 'type-graphql'
 
 registerEnumType(QueryOrder, {
   name: 'QueryOrder'
 })
-
-@ObjectType({ isAbstract: true })
-export class Base<T extends { id: string }> extends BaseEntity<T, 'id'> {
-  @Field(() => ID)
-  @PrimaryKey({ type: 'uuid' })
-  id: string = uuid()
-
-  @Field(() => Date)
-  @Property()
-  createdAt: Date = new Date()
-
-  @Field(() => Date)
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date()
-
-  constructor(body = {}) {
-    super()
-    this.assign(body)
-  }
-}
 
 @InputType()
 export class IDFilterInput {
