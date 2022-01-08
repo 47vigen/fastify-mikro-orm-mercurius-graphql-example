@@ -8,7 +8,7 @@
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
     "start:ts": "ts-node src/index.ts",
-    "init": "rm -r dist && git pull && yarn && tsc",
+    "clear": "rm -r dist && git pull && yarn && tsc",
     "pm2:start": "pm2 start yarn --name 'back' -- start",
     "pm2:logs": "pm2 logs back",
     "pm2:delete": "pm2 delete back",
