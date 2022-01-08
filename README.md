@@ -1,4 +1,4 @@
-# fastify-mikro-orm-mercurius-graphql-example
+## fastify-mikro-orm-mercurius-graphql-example
 
 A MikroORM boilerplate for GraphQL made with Fastify, Mercurius, Typescript using TypeGraphQL
 
