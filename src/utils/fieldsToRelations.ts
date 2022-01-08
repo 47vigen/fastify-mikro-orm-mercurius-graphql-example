@@ -26,5 +26,12 @@ export const fieldsToRelationsArgumentable = (info: any, includes?: string[]) =>
     }
   })
 
-  return feilds.filter((feild) => !EXCLUDES.includes(feild)).map((feild) => feild.replace(/.data|.meta/g, '').replace(/data.|meta./g, ''))
+  const filtered = feilds
+    .filter((feild) => !EXCLUDES.includes(feild))
+    .map((feild) => {
+      feild = feild.replace(new RegExp(`.${EXCLUDES.join('|.')}`, 'g'), '')
+      feild = feild.replace(new RegExp(`${EXCLUDES.join('.|')}.`, 'g'), '')
+      return feild
+    })
+  return [...new Set(filtered)]
 }
