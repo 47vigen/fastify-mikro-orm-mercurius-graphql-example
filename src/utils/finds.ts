@@ -62,7 +62,8 @@ export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate
   entityName: EntityName<T>,
   args: any,
   info: GraphQLResolveInfo,
-  where: FilterQuery<T> = {}
+  where: FilterQuery<T> = {},
+  includes?: string[]
 ): Promise<{ meta: MetaResponseCollection; data: [T] | undefined }> => {
   const limit = args.pagination?.limit || PAGINATE_LIMIT
   const page = (args.pagination?.page || 0) - 1 <= 0 ? 0 : (args.pagination?.page || 0) - 1
@@ -78,7 +79,7 @@ export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate
     offset,
     cache: DEFAULT_CACHE,
     orderBy: findOrderBy(args.orderBy),
-    populate: fieldsToRelationsArgumentable(info, ['description', 'fullbody']) as any
+    populate: fieldsToRelationsArgumentable(info, includes) as any
   } as FindOptions<T, P>
 
   if (needCount) {
@@ -99,10 +100,11 @@ export const findRelationalWithOptions = async <T extends AnyEntity<T>>(
   args: any,
   info: GraphQLResolveInfo,
   where: FilterQuery<T> = {},
-  collection: Collection<T>
+  collection: Collection<T>,
+  includes?: string[]
 ): Promise<{ meta: MetaResponseCollection; data: [T] | undefined }> => {
   if (Object.keys(args).length) {
-    return await findWithOptions(em, entityName, args, info, where)
+    return await findWithOptions(em, entityName, args, info, where, includes)
   }
   return {
     data: collection.toJSON() as [T] | undefined,

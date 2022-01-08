@@ -10,7 +10,7 @@ import { findWithOptions } from '../../utils/finds'
 export class ArticleResolver {
   @Query(() => ArticlesResponseCollection)
   async articles(@Ctx() { em }: MainCtx, @Args() args: ArticleArguments, @Info() info: GraphQLResolveInfo): Promise<ArticlesResponseCollection> {
-    return findWithOptions(em, Article, args, info)
+    return findWithOptions(em, Article, args, info, {}, ['description', 'fullbody'])
   }
 
   @Mutation(() => Article)
