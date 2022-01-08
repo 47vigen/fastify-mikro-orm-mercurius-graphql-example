@@ -100,14 +100,21 @@ export const findRelationalWithOptions = async <T extends AnyEntity<T>>(
   args: any,
   info: GraphQLResolveInfo,
   where: FilterQuery<T> = {},
-  collection: Collection<T>,
+  collection: Collection<T> | any,
   includes?: string[]
-): Promise<{ meta: MetaResponseCollection; data: T[] | undefined }> => {
+): Promise<{ meta?: MetaResponseCollection; data: T[] | undefined }> => {
   if (Object.keys(args).length) {
     return await findWithOptions(em, entityName, args, info, where, includes)
+  } else if (typeof collection.toJSON === 'function') {
+    return Object.assign(collection, {
+      data: collection.toJSON() as T[] | undefined,
+      meta: { page: 1, pages: 1, limit: collection.count(), total: collection.count() }
+    })
+  } else if (isArray(collection)) {
+    return {
+      data: collection as T[] | undefined,
+      meta: { page: 1, pages: 1, limit: collection.length, total: collection.length }
+    }
   }
-  return {
-    data: collection.toJSON() as T[] | undefined,
-    meta: { page: 1, pages: 1, limit: collection.count(), total: collection.count() }
-  }
+  return { data: undefined }
 }
