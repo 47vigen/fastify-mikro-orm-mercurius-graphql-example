@@ -8,7 +8,8 @@
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
     "start:ts": "ts-node src/index.ts",
-    "start:production": "rm -r dist && git pull && yarn && tsc && pm2 start yarn --name 'back' -- start",
+    "init": "rm -r dist && git pull && yarn && tsc",
+    "pm2:start": "pm2 start yarn --name 'back' -- start",
     "pm2:logs": "pm2 logs back",
     "pm2:delete": "pm2 delete back",
     "gen-env": "gen-env-types .env -o src/env.d.ts -e ."
