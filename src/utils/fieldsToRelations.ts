@@ -1,9 +1,12 @@
+const EXCLUDES = ['meta', 'data']
+
 const checkSelections = (selections: any[], perfix?: string, includes?: string[]): any[] => {
   const feilds: any[] = []
   for (const selection of selections) {
     if (!selection?.arguments?.length) {
-      if (includes?.includes(selection.name.value) || selection?.selectionSet?.selections?.length) {
-        const name = perfix ? perfix + selection.name.value : selection.name.value
+      const nameValue = selection.name.value
+      if (includes?.includes(nameValue) || selection?.selectionSet?.selections?.length) {
+        const name = perfix ? perfix + nameValue : nameValue
         feilds.push(name)
         if (selection?.selectionSet?.selections?.length) {
           feilds.push(...checkSelections(selection.selectionSet.selections, name + '.'))
@@ -23,5 +26,5 @@ export const fieldsToRelationsArgumentable = (info: any, includes?: string[]) =>
     }
   })
 
-  return feilds
+  return feilds.filter((feild) => !EXCLUDES.includes(feild)).map((feild) => feild.replace(/.data|.meta/g, '').replace(/data.|meta./g, ''))
 }

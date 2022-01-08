@@ -7,11 +7,9 @@ import { MainCtx } from '../../types'
 import { User } from '../../entities/User'
 import { Article } from '../../entities/Article'
 import { UserWithToken, UserInput } from './types'
-import { ArticleArguments } from '../article/types'
-import { findOrderBy, findPagination, findWhere } from '../../utils/findWithOptions'
+import { ArticleArguments, ArticlesResponseCollection } from '../article/types'
+import { findRelationalWithOptions } from '../../utils/finds'
 import { sign, signRefresh, verifyRefresh } from '../../services/jwt'
-import { fieldsToRelationsArgumentable } from './../../utils/fieldsToRelations'
-import { merge } from 'lodash'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -74,19 +72,13 @@ export class UserResolver {
     }
   }
 
-  @FieldResolver(() => [Article], { nullable: true })
+  @FieldResolver(() => ArticlesResponseCollection)
   async articles(
     @Root() root: User,
     @Ctx() { em }: MainCtx,
     @Info() info: GraphQLResolveInfo,
     @Args() args: ArticleArguments
-  ): Promise<Article[] | null> {
-    if (Object.keys(args).length) {
-      return em.find(Article, merge({ author: { id: { $eq: root.id } } }, findWhere(args.filters)), {
-        populate: fieldsToRelationsArgumentable(info, ['description', 'fullbody']),
-        orderBy: findOrderBy(args.orderBy),
-        ...findPagination(args.pagination)
-      })
-    } else return root.articles.toJSON() as Article[] | null
+  ): Promise<ArticlesResponseCollection> {
+    return findRelationalWithOptions(em, Article, args, info, { author: { id: { $eq: root.id } } }, root.articles)
   }
 }

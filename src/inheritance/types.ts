@@ -1,5 +1,5 @@
 import { QueryOrder } from 'mikro-orm'
-import { ArgsType, Field, Float, ID, InputType, Int, registerEnumType } from 'type-graphql'
+import { ArgsType, Field, Float, ID, InputType, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 registerEnumType(QueryOrder, {
   name: 'QueryOrder'
@@ -423,4 +423,25 @@ export class BaseArguments {
 
   @Field(() => [Order], { nullable: true })
   orderBy?: [Order]
+}
+
+@ObjectType()
+export class MetaResponseCollection {
+  @Field(() => Int, { nullable: true })
+  page?: number
+
+  @Field(() => Int, { nullable: true })
+  pages?: number
+
+  @Field(() => Int, { nullable: true })
+  total?: number
+
+  @Field(() => Int, { nullable: true })
+  limit?: number
+}
+
+@ObjectType()
+export class BaseResponseCollection {
+  @Field(() => MetaResponseCollection, { nullable: true })
+  meta?: MetaResponseCollection
 }
