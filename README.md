@@ -76,5 +76,6 @@ ___
 
 ## 🚧 Todo
 
-- just make it better :)
-- and complete auth
+- Complete auth
+- Create test
+- Eventually make it better :)
