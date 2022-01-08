@@ -1,4 +1,4 @@
-import { StringFilterInput, BaseFiltersInput, BaseArguments } from '../../inheritance/types'
+import { StringFilterInput, BaseFiltersInput, BaseArguments, BaseResponseCollection } from '../../inheritance/types'
 import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 import { ArticleFiltersInput } from '../article/types'
 import { User } from '../../entities/User'
@@ -53,4 +53,10 @@ export class UserFiltersInput extends BaseFiltersInput {
 export class UserArguments extends BaseArguments {
   @Field(() => StringFilterInput, { nullable: true })
   filters?: UserFiltersInput
+}
+
+@ObjectType()
+export class UsersResponseCollection extends BaseResponseCollection {
+  @Field(() => [User], { nullable: true })
+  data?: [User]
 }
