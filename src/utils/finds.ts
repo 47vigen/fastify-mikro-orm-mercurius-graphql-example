@@ -25,7 +25,7 @@ const CONVERTABLE_FILTER_KEYS = [
   'contains',
   'contained'
 ]
-const COUNT_NEEDABLE_KEYS = ['meta.pages', 'meta.total']
+const COUNTABLE_META_KEYS = ['meta.pages', 'meta.total']
 
 const checkFiltersKey = (key: string) => {
   if (CONVERTABLE_FILTER_KEYS.includes(key)) return '$' + key
@@ -65,7 +65,7 @@ export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate
 
   let data: T[] | (undefined & any) = []
   let meta: MetaResponseCollection = { page: page + 1, limit }
-  const isNeedingCount = !!Object.keys(fieldsProjection(info)).find((key) => COUNT_NEEDABLE_KEYS.includes(key))
+  const isNeedingCount = !!Object.keys(fieldsProjection(info)).find((key) => COUNTABLE_META_KEYS.includes(key))
 
   const FindWhere = merge(where, findWhere(args.filters)) as FilterQuery<T>
   const FindOptions = {
