@@ -15,11 +15,11 @@ export class Article extends Base<Article> {
   title!: string
 
   @Field(() => String)
-  @Property({ columnType: 'text', lazy: true })
+  @Property({ columnType: 'text' })
   description!: string
 
   @Field(() => String)
-  @Property({ columnType: 'text', lazy: true })
+  @Property({ columnType: 'text' })
   fullbody!: string
 
   @Field(() => User)
