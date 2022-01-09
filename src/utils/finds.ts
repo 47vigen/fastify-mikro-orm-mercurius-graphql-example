@@ -67,7 +67,6 @@ export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate
   let meta: MetaResponseCollection = { page: page + 1, limit }
 
   const populate = fieldsToRelationsArgumentable(info, includes)
-  console.log(populate)
   const isNeedingCount = !!Object.keys(fieldsProjection(info)).find((key) => COUNTABLE_META_KEYS.includes(key))
 
   const FindWhere = merge(where, findWhere(args.filters)) as FilterQuery<T>
