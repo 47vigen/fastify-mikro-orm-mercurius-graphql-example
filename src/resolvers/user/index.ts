@@ -79,6 +79,6 @@ export class UserResolver {
     @Info() info: GraphQLResolveInfo,
     @Args() args: ArticleArguments
   ): Promise<ArticlesResponseCollection> {
-    return findRelationalWithOptions(em, Article, args, info, { author: { id: { $eq: root.id } } }, root.articles, ['description', 'fullbody'])
+    return findRelationalWithOptions(em, Article, args, info, { author: { id: { $eq: root.id } } }, root.articles)
   }
 }
