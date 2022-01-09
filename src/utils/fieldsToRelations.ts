@@ -9,7 +9,7 @@ const checkSelections = (selections: any[], perfix?: string, includes?: string[]
         const name = perfix ? perfix + nameValue : nameValue
         feilds.push(name)
         if (selection?.selectionSet?.selections?.length) {
-          feilds.push(...checkSelections(selection.selectionSet.selections, name + '.'))
+          feilds.push(...checkSelections(selection.selectionSet.selections, name + '.', includes))
         }
       }
     } else break
