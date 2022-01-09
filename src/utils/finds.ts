@@ -65,6 +65,9 @@ export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate
 
   let data: T[] | (undefined & any) = []
   let meta: MetaResponseCollection = { page: page + 1, limit }
+
+  const populate = fieldsToRelationsArgumentable(info, includes)
+  console.log(populate)
   const isNeedingCount = !!Object.keys(fieldsProjection(info)).find((key) => COUNTABLE_META_KEYS.includes(key))
 
   const FindWhere = merge(where, findWhere(args.filters)) as FilterQuery<T>
@@ -72,17 +75,15 @@ export const findWithOptions = async <T extends AnyEntity<T>, P extends Populate
     limit,
     offset,
     cache: CACHE_EXPIRATION_TIME,
-    orderBy: findOrderBy(args.orderBy),
-    populate: fieldsToRelationsArgumentable(info, includes) as any
+    orderBy: findOrderBy(args.orderBy)
   } as FindOptions<T, P>
 
+  data = await em.find(entityName, FindWhere, FindOptions)
+  if (populate.length) data = await em.populate(data, populate)
   if (isNeedingCount) {
-    const [response, count] = await em.findAndCount(entityName, FindWhere, FindOptions)
+    const count = await em.count(entityName, FindWhere, FindOptions)
     meta.pages = Math.ceil(count / limit)
     meta.total = count
-    data = response
-  } else {
-    data = await em.find(entityName, FindWhere, FindOptions)
   }
 
   return { data, meta }
